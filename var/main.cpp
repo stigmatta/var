@@ -10,18 +10,19 @@ Var operator +(Var&a,float b);
 Var operator +(float a, Var& b);
 Var operator +(Var& a, string b);
 Var operator +(string a, Var& b);
-Var operator -(Var& a, Var& b); //prototypes
-Var operator -(Var& a, int b);á
+Var operator -(Var& a, Var& b);
+Var operator -(Var& a, int b);
 Var operator -(int a, Var& b);
-Var operator -(Var&a,float b);
+Var operator -(Var& a, float b);
 Var operator -(float a, Var& b);
 Var operator -(Var& a, string b);
-Var operator -(string a, Var& b);
+Var operator - (string a, Var& b);
 int main()
 {
 	Var a = "70";
 	float fl = 10.5;
 	string str = "hello";
+	string str1 = "50";
 	Var b = 60;
 	Var c = a+b;
 	c.print();
@@ -43,6 +44,13 @@ int main()
 	m.print();
 	m = b;
 	m.print();
+	Var a1 = "60";
+	Var n = a - a1;
+	n.print();
+	Var o = a - 10;
+	o.print();
+	Var p = a - str1;
+	p.print();
 }
 Var operator +(Var& a, Var& b)
 {
@@ -142,13 +150,92 @@ Var operator +(string a, Var& b)
 		c.set_string(a + b.get_string());
 	return c;
 }
-Var operator -(Var& a, Var& b)
+Var operator - (Var& a, Var& b)
 {
-
+	Var c;
+	if (a.get_float() != 0)
+	{
+		if (b.get_float() != 0)
+			c.set_float(a.get_float() - b.get_float());
+		else if (b.get_integer() != 0)
+			c.set_float(a.get_float() - b.get_integer());
+		else if (!(b.get_string().empty()))
+			c.set_float(a.get_float() - stof(b.get_string()));
+	}
+	else if (a.get_integer() != 0)
+	{
+		if (b.get_integer() != 0)
+			c.set_integer(a.get_integer() - b.get_integer());
+		else if (b.get_integer() != 0)
+			c.set_integer(a.get_integer() - (int)b.get_integer());
+		else if (!(b.get_string().empty()))
+			c.set_integer(a.get_integer() - stoi(b.get_string()));
+	}
+	else if (!(a.get_string().empty()))
+	{
+		if (b.get_integer() != 0)
+			c.set_string(to_string(stoi(a.get_string()) - (b.get_integer())));
+		else if (b.get_float() != 0)
+			c.set_string(to_string(stof(a.get_string()) - b.get_float()));
+		else if (!(b.get_string().empty()))
+			c.set_string(to_string(stoi(a.get_string()) - stoi(b.get_string())));
+	}
+	return c;
 }
-Var operator -(Var& a, int b);
-Var operator -(int a, Var& b);
-Var operator -(Var& a, float b);
-Var operator -(float a, Var& b);
-Var operator -(Var& a, string b);
-Var operator -(string a, Var& b);
+Var operator -(Var& a, int b)
+{
+	Var c;
+	if (a.get_integer() != 0)
+		c.set_integer(a.get_integer() - b);
+	else if (a.get_float() != 0)
+		c.set_integer(a.get_float() - b);
+	else if (!(a.get_string().empty()))
+		c.set_string(to_string(stoi(a.get_string()) - b));
+	return c;
+}
+Var operator -(int a, Var& b)
+{
+	Var c;
+	if (b.get_integer() != 0)
+		c.set_integer(a - b.get_integer());
+	else if (b.get_float() != 0)
+		c.set_integer(a - (int)b.get_float());
+	else if (!(b.get_string().empty()))
+		c.set_integer(a - stoi(b.get_string()));
+	return c;
+}
+Var operator -(Var& a, float b)
+{
+	Var c;
+	if (a.get_float() != 0)
+		c.set_float(a.get_float() - b);
+	else if (a.get_integer() != 0)
+		c.set_integer(a.get_integer() - (int)b);
+	else if (!(a.get_string().empty()))
+		c.set_string(to_string(stoi(a.get_string()) - b));
+	return c;
+}
+Var operator -(float a, Var& b)
+{
+	Var c;
+	if (b.get_float() != 0)
+		c.set_float(a - b.get_float());
+	else if (b.get_integer() != 0)
+		c.set_float(a - b.get_integer());
+	else if (!(b.get_string().empty()))
+		c.set_float(a - stof(b.get_string()));
+	return c;
+}
+Var operator -(Var& a, string b)
+{
+	Var c;
+	if (a.get_float() != 0)
+		c.set_float(a.get_float() - stof(b));
+	else if (a.get_integer() != 0)
+		c.set_integer(a.get_integer() - stoi(b));
+	else if (!(a.get_string().empty()))
+		c.set_string(to_string(stoi(a.get_string()) - stoi(b)));
+	return c;
+}
+
+

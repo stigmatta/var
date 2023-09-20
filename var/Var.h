@@ -13,7 +13,7 @@ public:
 	Var(int);
 	Var(float);
 	Var(string);
-	Var(const char* str);
+	Var(const char* str); 
 	int get_integer()const;
 	float get_float()const;
 	string get_string()const;
