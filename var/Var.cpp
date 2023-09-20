@@ -86,3 +86,10 @@ Var& Var:: operator = (const char* str)
 	this->str = str;
 	return *this;
 }
+char& Var:: operator[](int index)
+{
+	if (index >= 0 && index <= str.length())
+		return str[index];
+	return str[0];
+}
+

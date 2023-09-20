@@ -3,6 +3,9 @@
 #include "Var.h"
 
 using namespace std;
+string multiplication(Var& a, Var& b);
+string multiplication(Var& a, string b);
+string multiplication(string a,Var&b);
 Var operator +(Var& a, Var& b); //prototypes
 Var operator +(Var& a, int b);
 Var operator +(int a, Var& b);
@@ -10,6 +13,7 @@ Var operator +(Var&a,float b);
 Var operator +(float a, Var& b);
 Var operator +(Var& a, string b);
 Var operator +(string a, Var& b);
+Var operator +(Var& a, char b);
 Var operator -(Var& a, Var& b);
 Var operator -(Var& a, int b);
 Var operator -(int a, Var& b);
@@ -17,12 +21,31 @@ Var operator -(Var& a, float b);
 Var operator -(float a, Var& b);
 Var operator -(Var& a, string b);
 Var operator - (string a, Var& b);
+Var& operator +=(Var& a, Var&b);
+Var& operator +=(Var& a, int b);
+Var& operator +=(Var& a, float b);
+Var& operator +=(Var& a, string b);
+Var& operator -=(Var& a, Var& b);
+Var& operator -=(Var& a, int b);
+Var& operator -=(Var& a, float b);
+Var& operator -=(Var& a, string b);
+Var operator *(Var& a, Var& b);
+Var operator *(Var& a, int b);
+Var operator *(int a, Var& b);
+Var operator *(Var& a, float b);
+Var operator *(float a, Var& b);
+Var operator *(Var& a, string b);
+Var operator *(string a, Var& b);
+
+
 int main()
 {
 	Var a = "70";
+	Var astr = "yandex";
+	Var bstr = "lady";
 	float fl = 10.5;
+	char ch = 's';
 	string str = "hello";
-	string str1 = "50";
 	Var b = 60;
 	Var c = a+b;
 	c.print();
@@ -49,8 +72,67 @@ int main()
 	n.print();
 	Var o = a - 10;
 	o.print();
-	Var p = a - str1;
+	Var p = a - b;
 	p.print();
+	p += a;
+	p.print();
+	Var s = a + ch;
+	s.print();
+	s = bstr*str;
+	s.print();
+	Var r = astr*bstr;
+	r.print();
+}
+string multiplication(Var& a, Var& b)
+{
+	Var c;
+	for (int i = 0; i < a.get_string().length(); i++)
+	{
+		for (int j = 0; j < b.get_string().length(); j++)
+		{
+			if (a[i] == b[j])
+			{
+				c.set_string(c.get_string() + a[i]);
+				continue;
+			}
+
+		}
+	}
+	return c.get_string();
+}
+string multiplication(Var& a, string b)
+{
+	Var c;
+	for (int i = 0; i < a.get_string().length(); i++)
+	{
+		for (int j = 0; j < b.length(); j++)
+		{
+			if (a[i] == b[j])
+			{
+				c.set_string(c.get_string() + a[i]);
+				continue;
+			}
+
+		}
+	}
+	return c.get_string();
+}
+string multiplication(string a,Var&b)
+{
+	Var c;
+	for (int i = 0; i < a.length(); i++)
+	{
+		for (int j = 0; j < b.get_string().length(); j++)
+		{
+			if (a[i] == b[j])
+			{
+				c.set_string(c.get_string() + a[i]);
+				continue;
+			}
+
+		}
+	}
+	return c.get_string();
 }
 Var operator +(Var& a, Var& b)
 {
@@ -150,6 +232,17 @@ Var operator +(string a, Var& b)
 		c.set_string(a + b.get_string());
 	return c;
 }
+Var operator +(Var& a, char b)
+{
+	Var c;
+	if (a.get_integer() != 0)
+		c.set_integer(a.get_integer() + b);
+	else if (a.get_float() != 0)
+		c.set_float(a.get_float() + b);
+	else if (!(a.get_string().empty()))
+		c.set_string(a.get_string() + b);
+	return c;
+}
 Var operator - (Var& a, Var& b)
 {
 	Var c;
@@ -235,6 +328,238 @@ Var operator -(Var& a, string b)
 		c.set_integer(a.get_integer() - stoi(b));
 	else if (!(a.get_string().empty()))
 		c.set_string(to_string(stoi(a.get_string()) - stoi(b)));
+	return c;
+}
+Var operator - (string a, Var& b)
+{
+	Var c;
+	if (b.get_integer() != 0)
+		c.set_string(to_string(stoi(a) - b.get_integer()));
+	else if (b.get_float() != 0)
+		c.set_string(to_string(stof(a) - b.get_float()));
+	else if (!(b.get_string().empty()))
+		c.set_string(to_string(stoi(a) - stoi(b.get_string())));
+	return c;
+}
+Var& operator +=(Var& a, Var& b)
+{
+	if (a.get_integer() != 0)
+	{
+		if (b.get_integer() != 0)
+			a.set_integer(a.get_integer() + b.get_integer());
+		else if (b.get_float() != 0)
+			a.set_integer(a.get_integer() + (int)b.get_float());
+		else if (!(b.get_string().empty()))
+			a.set_integer(a.get_integer() + stoi(b.get_string()));
+	}
+	else if (a.get_float() != 0)
+	{
+		if (b.get_integer() != 0)
+			a.set_float(a.get_float() + b.get_integer());
+		else if (b.get_float() != 0)
+			a.set_float(a.get_float() + b.get_float());
+		else if (!(b.get_string().empty()))
+			a.set_float(a.get_float() + stof(b.get_string()));
+	}
+	else if (!(a.get_string().empty()))
+	{
+
+		if (b.get_integer() != 0)
+			a.set_string(a.get_string() + to_string(b.get_integer()));
+		else if (b.get_float() != 0)
+			a.set_string(a.get_string() + to_string(b.get_float()));
+		else if (!(b.get_string().empty()))
+			a.set_string(a.get_string() + b.get_string());
+	}
+	return a;
+}
+Var& operator +=(Var& a, int b)
+{
+	if (a.get_integer() != 0)
+		a.set_integer(a.get_integer() + b);
+	else if (a.get_float() != 0)
+		a.set_integer(a.get_float() + b);
+	else if (!(a.get_string().empty()))
+		a.set_string(a.get_string() + to_string(b));
+	return a;
+}
+Var& operator +=(Var& a, float b)
+{
+	if (a.get_float() != 0)
+		a.set_float(a.get_float() - b);
+	else if (a.get_integer() != 0)
+		a.set_integer(a.get_integer() - (int)b);
+	else if (!(a.get_string().empty()))
+		a.set_string(to_string(stoi(a.get_string()) - b));
+	return a;
+}
+Var& operator +=(Var& a, string b)
+{
+	if (a.get_float() != 0)
+		a.set_float(a.get_float() - stof(b));
+	else if (a.get_integer() != 0)
+		a.set_integer(a.get_integer() - stoi(b));
+	else if (!(a.get_string().empty()))
+		a.set_string(to_string(stoi(a.get_string()) - stoi(b)));
+	return a;
+}
+Var& operator -=(Var& a, Var& b)
+{
+	if (a.get_float() != 0)
+	{
+		if (b.get_float() != 0)
+			a.set_float(a.get_float() - b.get_float());
+		else if (b.get_integer() != 0)
+			a.set_float(a.get_float() - b.get_integer());
+		else if (!(b.get_string().empty()))
+			a.set_float(a.get_float() - stof(b.get_string()));
+	}
+	else if (a.get_integer() != 0)
+	{
+		if (b.get_integer() != 0)
+			a.set_integer(a.get_integer() - b.get_integer());
+		else if (b.get_integer() != 0)
+			a.set_integer(a.get_integer() - (int)b.get_integer());
+		else if (!(b.get_string().empty()))
+			a.set_integer(a.get_integer() - stoi(b.get_string()));
+	}
+	else if (!(a.get_string().empty()))
+	{
+		if (b.get_integer() != 0)
+			a.set_string(to_string(stoi(a.get_string()) - (b.get_integer())));
+		else if (b.get_float() != 0)
+			a.set_string(to_string(stof(a.get_string()) - b.get_float()));
+		else if (!(b.get_string().empty()))
+			a.set_string(to_string(stoi(a.get_string()) - stoi(b.get_string())));
+	}
+	return a;
+}
+Var& operator -=(Var& a, int b)
+{
+	if (a.get_integer() != 0)
+		a.set_integer(a.get_integer() - b);
+	else if (a.get_float() != 0)
+		a.set_integer(a.get_float() - b);
+	else if (!(a.get_string().empty()))
+		a.set_string(to_string(stoi(a.get_string()) - b));
+	return a;
+}
+Var& operator -=(Var& a, float b)
+{
+	if (a.get_float() != 0)
+		a.set_float(a.get_float() - b);
+	else if (a.get_integer() != 0)
+		a.set_integer(a.get_integer() - (int)b);
+	else if (!(a.get_string().empty()))
+		a.set_string(to_string(stoi(a.get_string()) - b));
+	return a;
+}
+Var& operator -=(Var& a, string b)
+{
+	if (a.get_float() != 0)
+		a.set_float(a.get_float() - stof(b));
+	else if (a.get_integer() != 0)
+		a.set_integer(a.get_integer() - stoi(b));
+	else if (!(a.get_string().empty()))
+		a.set_string(to_string(stoi(a.get_string()) - stoi(b)));
+	return a;
+}
+Var operator *(Var& a, Var& b)
+{
+	Var c;
+	if (a.get_float() != 0)
+	{
+		if (b.get_float() != 0)
+			c.set_float(a.get_float() * b.get_float());
+		else if (b.get_integer() != 0)
+			c.set_float(a.get_float() * b.get_integer());
+		else if (!(b.get_string().empty()))
+			c.set_float(a.get_float() * stof(b.get_string()));
+	}
+	else if (a.get_integer() != 0)
+	{
+		if (b.get_integer() != 0)
+			c.set_integer(a.get_integer() * b.get_integer());
+		else if (b.get_integer() != 0)
+			c.set_integer(a.get_integer() * (int)b.get_integer());
+		else if (!(b.get_string().empty()))
+			c.set_integer(a.get_integer() * stoi(b.get_string()));
+	}
+	else if (!(a.get_string().empty()))
+	{
+		if (b.get_integer() != 0)
+			c.set_string(to_string(stoi(a.get_string()) * b.get_integer()));
+		else if (b.get_float() != 0)
+			c.set_string(to_string(stof(a.get_string()) * b.get_float()));
+		else if (!(b.get_string().empty()))
+			c=multiplication(a, b);
+	}
+	return c;
+}
+Var operator *(Var& a, int b)
+{
+	Var c;
+	if (a.get_integer() != 0)
+		c.set_integer(a.get_integer() * b);
+	else if (a.get_float() != 0)
+		c.set_float(a.get_float() * b);
+	else if (!(a.get_string().empty()))
+		c.set_string(to_string(stoi(a.get_string()) * b));
+	return c;
+}
+Var operator *(int a, Var& b)
+{
+	Var c;
+	if (b.get_integer() != 0)
+		c.set_integer(b.get_integer() * a);
+	else if (b.get_float() != 0)
+		c.set_integer((int)b.get_float() * a);
+	else if (!(b.get_string().empty()))
+		c.set_integer(stoi(b.get_string()) * a);
+	return c;
+}
+Var operator *(Var& a, float b)
+{
+	Var c;
+	if (a.get_integer() != 0)
+		c.set_integer(a.get_integer() * (int)b);
+	else if (a.get_float() != 0)
+		c.set_float(a.get_float() * b);
+	else if (!(a.get_string().empty()))
+		c.set_string(to_string(stof(a.get_string()) * b));
+	return c;
+}
+Var operator *(float a, Var& b)
+{
+	Var c;
+	if (b.get_integer() != 0)
+		c.set_float(b.get_integer() * a);
+	else if (b.get_float() != 0)
+		c.set_float(b.get_float() * a);
+	else if (!(b.get_string().empty()))
+		c.set_float(stof(b.get_string()) * a);
+	return c;
+}
+Var operator *(Var& a, string b)
+{
+	Var c;
+	if (a.get_integer() != 0)
+		c.set_integer(a.get_integer() * stoi(b));
+	else if (a.get_float() != 0)
+		c.set_float(a.get_float() * stof(b));
+	else if (!(a.get_string().empty()))
+		c = multiplication(a, b);
+	return c;
+}
+Var operator *(string a, Var& b)
+{
+	Var c;
+	if (b.get_integer() != 0)
+		c.set_integer(b.get_integer() * stoi(a));
+	else if (b.get_float() != 0)
+		c.set_float(b.get_float() * stof(a));
+	else if (!(b.get_string().empty()))
+		c = multiplication(a, b);
 	return c;
 }
 

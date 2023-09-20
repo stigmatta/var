@@ -22,4 +22,6 @@ public:
 	void set_string(string a);
 	void print()const;
 	Var& operator = (const char* str);
+	char& operator[](int index);
+
 };
