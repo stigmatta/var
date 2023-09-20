@@ -92,4 +92,26 @@ char& Var:: operator[](int index)
 		return str[index];
 	return str[0];
 }
+Var::operator float() const
+{
+	if (!(this->str.empty()))
+		return stof(str);
+	else if (this->integer != 0)
+		return (float)integer;
+}
+Var::operator int() const 
+{
+	if (!(this->str.empty()))
+		return stoi(str);
+	else if (this->flo != 0)
+		return (int)flo;
+}
+
+Var::operator string() const 
+{
+	if (integer != 0)
+		return to_string(integer);
+	else if (flo != 0)
+		return to_string(flo);
+}
 

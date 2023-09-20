@@ -23,5 +23,10 @@ public:
 	void print()const;
 	Var& operator = (const char* str);
 	char& operator[](int index);
+	operator float() const;
+	operator int() const;
+	operator string() const;
+
+
 
 };
